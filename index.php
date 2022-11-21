@@ -35,10 +35,8 @@
                     $allupload = true;
                     foreach ($list_dm as $key => $row) {
                         if($category == $row['name'] || $category == ""){
-                            $_SESSION['error_dm'] = "Tên danh mục đã tồn tại hoặc bị để trống";
+                            $error_dm = "Tên danh mục đã tồn tại hoặc bị để trống";
                             $allupload = false;
-                        }else{
-                            unset($_SESSION['error']);
                         }
                     }
 
@@ -73,7 +71,7 @@
                     header('location:index.php?action=login_admin');
                     // include 'admin/account/login_admin.php';
                 }
-
+                unset($_SESSION['error_dm']);
                 if(isset($_GET['id'])){
                     $id = $_GET['id'];
                     $listone_danhmuc = loadone_danhmuc($id);
@@ -89,13 +87,30 @@
                 }
 
                 if(isset($_POST['update_dm'])){
+                    
                     $category = $_POST['category'];
                     $id = $_POST['id'];
-                    // var_dump($id);
-                    // die();
-                    update_danhmuc($id,$category);
                     $list_dm = loadall_danhmuc();
+                    $allupload = true;
+                    // foreach ($list_dm as $key => $row) {
+                    //     if($category == $row['name'] || $category == ""){
+                    //         // $_SESSION['error_dm'] = "Tên danh mục đã tồn tại hoặc bị để trống";
+                    //         $error_dm = "Tên danh mục đã tồn tại hoặc bị đển trống";
+                    //         $allupload = false;
+                    //     }
+                    //     else{
+                    //         unset($_SESSION['error_dm']);
+                    //     }
+                    // }
+                        if($allupload == true){
+                            update_danhmuc($id,$category);
+                        }
+                        if($allupload == false){
+                            header('location: index.php?action=suadm&id='.$id);
+                            $_SESSION['error_dm'] = $error_dm;
+                        } 
                 }
+                $list_dm = loadall_danhmuc();
                 include 'admin/loai_san_pham/loai_san_pham.php';
                 break;
 
@@ -136,40 +151,33 @@
                         $error_iddm = "id danh mục không được để trống";
                         $upload = false;
                     }
-                    // else{
-                    //     unset($_SESSION['error_iddm']);
-                    // }
+                    
                     foreach ($list_sp as $key => $row) {
-                        if($name == "" || $name == $row['name']){
-                            $error_name = "tên sản phầm đã tồn tại hoặc bị để trống";
+                        if($name == ""){
+                            $error_name = "tên sản phầm không được để trống";
+                            $upload = false;
+                        }if($name == $row['name']){
+                            $error_name = "Tên sản phẩm đã tồn tại";
                             $upload = false;
                         }
-                        // else{
-                        //     unset($_SESSION['error_name']);
-                        // }
+                        
                     }
                     if($price == "" ){    
                         $error_price = "Giá không được để trống hoặc bắt buộc phải nhập số";
                         $upload = false;
                         
                     }
-                    // else{
-                    //     unset($_SESSION['error_price']);
-                    // }
+                    
                     if($img == "" || $img2 == "" || $img3 == ""){
                         $error_img = "Ảnh không được để trống";
                         $upload = false;
                     }
-                    // else{
-                    //     unset($_SESSION['error_img']);
-                    // }
+                    
                     if($details == ""){
                         $error_detail = "chi tiết sản phẩm không được để trống";
                         $upload = false;
                     }
-                    // else{
-                    //     unset($_SESSION['error_detail']);
-                    // }
+                    
                     if($upload == true){
                         add_sanpham($name,$price,$img,$img2,$img3,$details,$iddm); 
                         header('location: index.php?action=list_sp');

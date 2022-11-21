@@ -10,7 +10,7 @@
         <div class="mb-3">
             <label for="" class="form-label">Tên danh mục</label>
             <input type="text" name="category" class="form-control" >
-            <b style="color:red;"><?php echo isset($_SESSION['error_dm']) ? $_SESSION['error_dm'] : "" ?></b><br>
+            <b style="color:red;"><?php echo isset($error_dm) ? $error_dm : "" ?></b><br>
         </div>
         <button type="submit" class="btn btn-primary" name="btn_dm">Thêm danh mục</button>
     </form>
